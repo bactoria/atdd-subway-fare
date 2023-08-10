@@ -8,6 +8,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.List;
 
+import static nextstep.subway.domain.Fare.ZERO_FARE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SubwayMapTest {
@@ -27,9 +28,9 @@ public class SubwayMapTest {
         양재역 = createStation(3L, "양재역");
         남부터미널역 = createStation(4L, "남부터미널역");
 
-        신분당선 = new Line("신분당선", "red");
-        이호선 = new Line("2호선", "red");
-        삼호선 = new Line("3호선", "red");
+        신분당선 = new Line("신분당선", "red", ZERO_FARE);
+        이호선 = new Line("2호선", "red", ZERO_FARE);
+        삼호선 = new Line("3호선", "red", ZERO_FARE);
 
         신분당선.addSection(강남역, 양재역, 3, 3);
         이호선.addSection(교대역, 강남역, 3, 3);
@@ -44,7 +45,7 @@ public class SubwayMapTest {
         SubwayMap subwayMap = new SubwayMap(lines);
 
         // when
-        Path path = subwayMap.findPath(교대역, 양재역, PathType.DISTANCE);
+        Path path = subwayMap.findPath(교대역, 양재역, new DistancePathType());
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 강남역, 양재역));
@@ -57,7 +58,7 @@ public class SubwayMapTest {
         SubwayMap subwayMap = new SubwayMap(lines);
 
         // when
-        Path path = subwayMap.findPath(교대역, 양재역, PathType.DURATION);
+        Path path = subwayMap.findPath(교대역, 양재역, new DurationPathType());
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(교대역, 남부터미널역, 양재역));
@@ -70,7 +71,7 @@ public class SubwayMapTest {
         SubwayMap subwayMap = new SubwayMap(lines);
 
         // when
-        Path path = subwayMap.findPath(양재역, 교대역, PathType.DISTANCE);
+        Path path = subwayMap.findPath(양재역, 교대역, new DistancePathType());
 
         // then
         assertThat(path.getStations()).containsExactlyElementsOf(Lists.newArrayList(양재역, 강남역, 교대역));

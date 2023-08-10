@@ -1,5 +1,6 @@
 package nextstep.subway.domain;
 
-public enum PathType {
-    DISTANCE, DURATION
+@FunctionalInterface
+public interface PathType {
+    double getWeight(Section section);
 }
